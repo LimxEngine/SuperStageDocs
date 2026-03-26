@@ -70,7 +70,9 @@ USceneComponent
 | `LensTransform` | `FTransform` | `Identity` | 镜头变换 |
 | `Angle` | `float` | `1.0` | Spot 角度 |
 | `DimmerCurveExponent` | `float` | `2.0` | 亮度响应曲线指数（1-3） |
-| `ComponentDimmer` | `float` | `1.0` | 组件级亮度分控（0-1） |
+| `MaxLightIntensity` | `float` | `1.0` | 组件级亮度分控（0-1） |
+
+> **初始化说明**：所有默认参数由组件 `OnRegister()` 自动初始化。组件注册时会自动调用 `SetLightingMaterial()` 和 `SetLightingDefaultValue()`，无需在 Actor 中手动调用。
 
 #### DimmerCurveExponent 说明
 
@@ -83,12 +85,12 @@ USceneComponent
 
 **公式**: `Output = pow(Input, DimmerCurveExponent)`
 
-#### ComponentDimmer 说明
+#### MaxLightIntensity 说明
 
-组件级亮度分控，与 Actor 级 Dimmer 乘法叠加：
+组件级亮度分控（原名 ComponentDimmer），与 Actor 级 Dimmer 乘法叠加：
 
 ```
-FinalIntensity = ActorDimmer × ComponentDimmer × StrobeMultiplier
+FinalIntensity = ActorDimmer × MaxLightIntensity × StrobeMultiplier
 ```
 
 ### 材质
@@ -537,7 +539,7 @@ class SUPERSTAGE_API USilentRectLightComponent : public URectLightComponent
 | `EffectMaterialNo` | `int` | `0` | 材质编号 |
 | `bTransparent` | `bool` | `false` | 透明材质开关 |
 | `EffectTransform` | `FTransform` | `Identity` | 效果网格变换 |
-| `ComponentDimmer` | `float` | `1.0` | 组件级亮度分控 |
+| `MaxLightIntensity` | `float` | `1.0` | 组件级亮度分控 |
 
 ### 材质
 
@@ -627,7 +629,7 @@ void SetEffectsControl(
 | `StaticMeshMatrix` | `UStaticMesh*` | — | 矩阵网格模型 |
 | `bTransparent` | `bool` | `false` | 透明材质开关 |
 | `MatrixTransform` | `FTransform` | `Identity` | 网格变换 |
-| `ComponentDimmer` | `float` | `1.0` | 组件级亮度分控 |
+| `MaxLightIntensity` | `float` | `1.0` | 组件级亮度分控 |
 
 ### 分段光源配置
 
@@ -780,7 +782,7 @@ void SetLiftZ(float InPosZ = 0.f, float LiftRange = 100.f, float LiftSpeed = 1.f
 | `FogSpeed` | `float` | — | 0-2 | 烟雾流动速度 |
 | `FogInfluence` | `float` | — | 0-1 | 烟雾影响强度 |
 | `SpotDimmer` | `float` | — | 0-5 | 光斑亮度（打在物体上） |
-| `ComponentDimmer` | `float` | `1.0` | 0-1 | 组件级亮度分控 |
+| `MaxLightIntensity` | `float` | `1.0` | 0-1 | 组件级亮度分控 |
 | `bEnableCollision` | `bool` | — | — | 碰撞遮挡检测 |
 | `BeamMaterial` | `UMaterialInterface*` | — | — | 激光线材质 |
 

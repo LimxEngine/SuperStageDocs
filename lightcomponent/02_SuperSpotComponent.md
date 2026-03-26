@@ -2,7 +2,7 @@
 
 > **所属模块**: SuperStage 运行时  
 > **适用对象**: 灯光设计师、灯具蓝图制作者  
-> **前置阅读**: [01 - 基础灯光组件](/docs/light-components/lighting)
+> **前置阅读**: [01 - 基础灯光组件](01_SuperLightingComponent.md)
 
 ---
 
@@ -77,9 +77,11 @@ DMX Zoom 通道值（0~1）会被映射到这个范围内：
 |------|------|--------|
 | **Angle** | 光斑角度参考值 | 1.0 |
 | **DimmerCurveExponent** | 亮度响应曲线指数 | 2.0 |
-| **ComponentDimmer** | 组件级亮度分控 | 1.0 |
+| **MaxLightIntensity** | 组件级亮度分控 | 1.0 |
 | **StaticMeshLens** | 镜片模型 | — |
 | **LensTransform** | 镜片变换 | 无偏移 |
+
+> **自动初始化**：组件默认参数由 `OnRegister()` 自动初始化。组件注册时会自动调用 `SetLightingMaterial()` 创建材质实例，再调用 `SetLightingDefaultValue()` 设置默认值，无需在 Actor 中手动调用。
 
 ---
 

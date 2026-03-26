@@ -1748,7 +1748,7 @@ A：
 | **企业年订阅** | 365 天 | 团队/工作室 |
 | **企业一次性** | 永久 | 企业买断 |
 
-**具体价格请访问**：https://yunsio.com/zh/pricing
+**具体价格请访问**：https://yunsio.com
 
 ### 12.2 各版本说明
 
@@ -1781,9 +1781,9 @@ A：
 
 | 渠道 | 链接/方式 |
 |------|----------|
-| **官方网站** | https://yunsio.com/zh |
-| **定价页面** | https://yunsio.com/zh/pricing |
-| **用户协议** | https://yunsio.com/zh/user-agreement |
+| **官方网站** | https://yunsio.com |
+| **定价页面** | https://yunsio.com/pricing |
+| **用户协议** | https://yunsio.com/terms |
 | **Bilibili** | 搜索 "SuperStage2025" |
 | **微信公众号** | 回复 "SuperStage2025" 加入社群 |
 

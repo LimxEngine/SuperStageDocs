@@ -692,7 +692,7 @@ Z: 光束标记（>0 表示光束点）
 1. **创建灯库资产** — 定义 DMX 通道映射
 2. **创建 C++ Actor 类** — 继承合适的基类
 3. **添加组件** — 在构造函数中创建灯光/效果组件
-4. **实现初始化** — OnConstruction + BeginPlay 中调用 SetLightingDefaultValue（各一次）
+4. ~~**实现初始化** — OnConstruction + BeginPlay 中调用 SetLightingDefaultValue（各一次）~~ → **组件自动初始化**：组件注册时由 `OnRegister()` 自动调用 `SetLightingMaterial()` 和 `SetLightingDefaultValue()`
 5. **实现 DMX 控制** — Tick 中调用控制函数
 6. **创建蓝图子类** — 设置模型和材质
 7. **测试** — 在场景中放置并连接 DMX
@@ -905,9 +905,9 @@ Event BeginPlay
 ```
 
 **关键**：
-- `SetLightingDefaultValue` 必须在 `SuperDMXTick` 中的控制函数之前调用，否则材质未初始化
-- 在 `OnConstruction` 中调用可确保编辑器中放置灯具时即完成初始化
-- **不要**在 `Tick` 或 `SuperDMXTick` 中重复调用初始化函数
+- ~~`SetLightingDefaultValue` 必须在 `SuperDMXTick` 中的控制函数之前调用，否则材质未初始化~~
+- > **26Q2.2 更新**：组件默认参数已迁移到组件内部，由 `OnRegister()` 自动初始化。组件注册时会自动调用 `SetLightingMaterial()` 创建材质，再调用 `SetLightingDefaultValue()` 设置默认值。**无需在 Actor 中手动调用初始化函数**。
+- 如果需要自定义默认参数值，只需在组件上设置 `MaxLightIntensity`、`ZoomRange` 等属性即可，组件会自动应用。
 
 ---
 
@@ -3149,12 +3149,17 @@ SetEffectColorMatrix(DmxColorR, DmxColorG, DmxColorB)        // 效果颜色
 
 ### Q6: 材质未初始化（组件全黑/透明）
 
-确保在蓝图的 `OnConstruction`（构造脚本）和 `BeginPlay` 中各调用一次：
+> **26Q2.2 更新**：组件现在会自动初始化！组件注册时由 `OnRegister()` 自动调用初始化函数，无需在 Actor 中手动调用。
+
+如果仍然遇到问题，请检查：
+- 组件的 `StaticMeshLens` / `StaticMeshEffect` / `StaticMeshMatrix` 是否正确赋值
+- 材质资产（`LensMaterial` / `LightSpotMaterial` / `BeamMaterial` 等）是否正确设置
+- 组件是否已正确附加到灯头变换组件
+
+旧版本（26Q2.1 及以前）需要手动调用：
 - 光束组件：`SetLightingDefaultValue(SuperLighting)`
 - 效果组件：`SetEffectDefaultValue(SuperEffect)`
 - 矩阵组件：`SetMatrixMaterial()`（在 `USuperMatrixComponent` 上调用）
-
-**不要**将这些初始化函数放在 `Tick` 或 `SuperDMXTick` 中。
 
 ---
 

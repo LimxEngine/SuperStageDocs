@@ -40,7 +40,7 @@
 | 属性 | 类型 | 类别 | 说明 |
 |------|------|------|------|
 | `AssetData` | `FAssetMetaData` | `A.Asset` | 资产元数据（UUID、制造商、DMX 模式等） |
-| `SceneBase` | `USceneComponent*` | `A.Components` | 根场景组件，所有子组件的挂载点 |
+| `SceneBase` | `USceneComponent*` | `Z.Components` | 根场景组件，所有子组件的挂载点 |
 | `bPreviewAssetOrientation` | `bool` | `F.Preview` | 方向预览开关（显示前向/上方箭头） |
 | `ForwardArrow` | `UArrowComponent*` | — | 前向箭头（绿色，+X 方向），`Transient` |
 | `UpArrow` | `UArrowComponent*` | — | 向上箭头（蓝色，+Z 方向），`Transient` |

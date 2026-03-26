@@ -2,7 +2,7 @@
 
 > **所属模块**: SuperStage 运行时  
 > **适用对象**: 灯光设计师、灯具蓝图制作者  
-> **前置阅读**: [03 - 体积光束组件](/docs/light-components/beam)
+> **前置阅读**: [03 - 体积光束组件](03_SuperBeamComponent.md)
 
 ---
 

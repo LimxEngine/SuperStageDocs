@@ -2,7 +2,7 @@
 
 > **所属模块**: SuperStage 运行时  
 > **适用对象**: 灯光设计师、灯具蓝图制作者  
-> **前置阅读**: [02 - 聚光灯组件](/docs/light-components/spot)
+> **前置阅读**: [02 - 聚光灯组件](02_SuperSpotComponent.md)
 
 ---
 
@@ -73,7 +73,9 @@ SuperBeamComponent 管理**三套**独立的动态材质，确保镜片、光斑
 | **bDisableLightFunction** | SuperSpotComponent | 光照函数开关 |
 | **Angle** | SuperLightingComponent | 光斑角度 |
 | **DimmerCurveExponent** | SuperLightingComponent | 亮度曲线指数 |
-| **ComponentDimmer** | SuperLightingComponent | 组件级亮度分控 |
+| **MaxLightIntensity** | SuperLightingComponent | 组件级亮度分控 |
+
+> **自动初始化**：组件默认参数由 `OnRegister()` 自动初始化。组件注册时会自动调用 `SetLightingMaterial()` 和 `SetBeamDefaultValue()`，无需在 Actor 中手动调用。
 
 ---
 

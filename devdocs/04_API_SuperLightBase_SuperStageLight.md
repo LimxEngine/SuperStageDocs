@@ -71,8 +71,8 @@ SceneBase (继承自 ASuperDmxActorBase)
 
 | 组件 | 类型 | 类别 | 说明 |
 |------|------|------|------|
-| `SceneRocker` | `USceneComponent*` | `A.Components` | Pan 旋转轴，绕 Yaw 旋转 |
-| `SceneHard` | `USceneComponent*` | `A.Components` | Tilt 旋转轴，绕 Roll 旋转 |
+| `SceneRocker` | `USceneComponent*` | `Z.Components` | Pan 旋转轴，绕 Yaw 旋转 |
+| `SceneHard` | `USceneComponent*` | `Z.Components` | Tilt 旋转轴，绕 Roll 旋转 |
 
 > **旋转轴映射**: Pan → `SceneRocker.Yaw`，Tilt → `SceneHard.Roll`。其他轴保持不变。
 

@@ -542,10 +542,10 @@ SuperStage 的灯光渲染通过**组件化设计**实现高度复用：
 1. **放置灯具 Actor** — 将 `ASuperStageLight`（或其子类蓝图）拖入场景
 2. **配置灯库** — 设置 `FixtureLibrary`（灯库数据资产）
 3. **配置 DMX 地址** — 设置 `SuperDMXFixture`（Universe + StartAddress）
-4. **编写控制逻辑** — 在蓝图中实现 `SuperDMXTick` 事件：
+4. **设置组件默认参数**（可选）— 在组件面板调整 `MaxLightIntensity`、`ZoomRange` 等
+5. **编写控制逻辑** — 在蓝图中实现 `SuperDMXTick` 事件：
    ```
    Event SuperDMXTick
-     → SetLightingDefaultValue (初始化，仅首帧)
      → SetLightingIntensity (Dimmer 属性)
      → SetLightingStrobe (Strobe 属性)
      → SetLightingColorRGB (Red/Green/Blue 属性)
@@ -554,7 +554,9 @@ SuperStage 的灯光渲染通过**组件化设计**实现高度复用：
      → SetLightingZoom (Zoom 属性)
      → ...
    ```
-5. **启动 DMX 接收** — 通过编辑器工具或蓝图调用 `USuperDMXSubsystem::ApplyConfig()`
+6. **启动 DMX 接收** — 通过编辑器工具或蓝图调用 `USuperDMXSubsystem::ApplyConfig()`
+
+> **26Q2.2 更新**：组件默认参数由 `OnRegister()` 自动初始化。组件注册时会自动调用 `SetLightingMaterial()` 创建材质实例，再调用 `SetLightingDefaultValue()` 设置默认值。**无需在 Actor 中手动调用初始化函数**。
 
 ### 5.3 FSuperDMXAttribute 查询机制
 

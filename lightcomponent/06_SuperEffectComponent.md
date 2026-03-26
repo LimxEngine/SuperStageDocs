@@ -2,7 +2,7 @@
 
 > **所属模块**: SuperStage 运行时  
 > **适用对象**: 灯光设计师、灯具蓝图制作者  
-> **前置阅读**: [00 - 光源组件总览](/docs/light-components/overview)
+> **前置阅读**: [00 - 光源组件总览](00_LightComponent_Overview.md)
 
 ---
 
@@ -80,12 +80,14 @@ SuperEffectComponent (继承自 USceneComponent)
 
 | 参数 | 说明 | 范围 | 默认值 |
 |------|------|------|--------|
-| **ComponentDimmer** | 组件级亮度分控，与 Actor 级 Dimmer 乘法叠加 | 0.0 ~ 1.0 | 1.0 |
+| **MaxLightIntensity** | 组件级亮度分控，与 Actor 级 Dimmer 乘法叠加 | 0.0 ~ 1.0 | 1.0 |
 
 最终亮度公式：
 ```
-最终亮度 = Actor级Dimmer × ComponentDimmer × 频闪倍率
+最终亮度 = Actor级Dimmer × MaxLightIntensity × 频闪倍率
 ```
+
+> **自动初始化**：组件默认参数由 `OnRegister()` 自动初始化。组件注册时会自动调用 `SetEffectMaterial()` 创建材质实例并设置默认值，无需在 Actor 中手动调用。
 
 ---
 

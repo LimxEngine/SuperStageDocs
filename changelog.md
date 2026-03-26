@@ -4,6 +4,158 @@
 
 ---
 
+## 版本 26Q2.2
+
+> 📦 **版本号**：26Q2.2
+> 📅 **发布日期**：2026年3月26日
+> 🔧 **基于版本**：26Q2.1
+
+### 👥 程序化人群生成系统（全新）
+
+新增 `SuperCrowd` 程序化人群 Actor，在闭合样条线区域内自动生成不重叠的人群，支持地形捕捉。
+
+**核心特性：**
+- **泊松圆盘采样**：Bridson 算法保证角色之间最小间距（安全半径）
+- **地形射线检测**：从上方发射射线，捕捉地面高度，角色脚部自动贴合地面
+- **多角色类型**：支持任意数量的角色模板，按权重随机分配
+- **ISM 组件池**：预创建组件池高效渲染，蓝图编译不丢失
+
+**参数配置：**
+| 参数 | 功能 | 默认值 |
+|------|------|--------|
+| SafetyRadius | 角色之间最小距离 | 60cm |
+| TargetCount | 目标人群数量 | 50人 |
+| RandomSeed | 随机种子（0=每次随机） | 0 |
+| bSnapToGround | 地形捕捉开关 | 开启 |
+| bRandomYaw | 随机Y轴旋转 | 开启 |
+
+**角色模板属性：**
+- `Mesh`：角色静态网格体
+- `Weight`：选择权重（自动归一化）
+- `Scale`/`ScaleVariation`：基础缩放和随机变化
+- `FootOffsetZ`：脚部Z偏移（非标准原点模型）
+- `BaseRotationOffset`：基础旋转偏移（默认朝向 Y- 方向）
+- `MaxRotationVariation`：随机旋转范围（默认 ±15°）
+
+### 🔧 默认参数迁移优化
+
+组件默认参数全面迁移到组件内部 `OnRegister()` 自动初始化，简化灯具开发流程。
+
+**核心改动：**
+- 默认参数由 Actor 层下沉到组件层，组件注册时自动调用 `SetLightingMaterial()` 和 `SetLightingDefaultValue()`
+- `ComponentDimmer` 重命名为 `MaxLightIntensity`，统一命名规范
+- 移除组件的 `VisibleAnywhere` 标记，避免编辑器显示冗余
+- 新增 `BeamAttenuationMode` 开关，可独立控制光束视角衰减功能
+
+**灯具开发简化：**
+- 现在创建自定义灯具时，只需设置组件默认参数，无需在 Actor 中手动调用初始化函数
+- 组件注册后自动完成材质创建和默认值应用
+
+### 🐛 Bug 修复
+
+- **修复 PIE 运行时光束视角衰减导致崩溃**：PIE 启动过程中编辑器视口状态不稳定，改为 PIE 时使用玩家相机
+
+### 🏗️ 程序化桁架资产系统（全新）
+
+新增 4 个程序化桁架结构 Actor，支持参数化建模与 DIN 4113 载荷计算。
+
+**新增资产：**
+
+| Actor | 功能 | 特性 |
+|-------|------|------|
+| SuperCircularTruss | 圆形/弧形桁架 | 可调角度、半径、分段数 |
+| SuperCurvedTruss | 曲线桁架 | 贝塞尔曲线控制点 |
+| SuperTrussTower | 桁架塔柱 | 多层立柱、顶部法兰 |
+| SuperTrussGrid | 水平桁架网格 | 灯光吊挂系统、Cross/Warren 斜撑 |
+
+**技术特性：**
+- ISM 组件高效批量渲染
+- Hash 脏检查机制（属性变更才重建）
+- DIN 4113 铝合金结构载荷计算标准
+- 支持材质自定义
+- 实时统计构件数量/重量/载荷
+
+### 🌐 全量本地化翻译支持
+
+所有UI界面和资产属性参数现已完整支持本地化翻译，支持中/英文自动切换，跟随编辑器语言设置变化。
+
+**核心改动：**
+
+- **资产元数据本地化**：`FAssetMetaData` 字段由 `FString` 改为 `FText`，支持多语言
+- **资产浏览器翻译**：Group/Manufacturer/DMXMode/DisplayName 显示翻译后的文本
+- **UI面板文本收集**：所有编辑器面板使用 `LOCTEXT` 宏，确保文本可被本地化收集
+
+**技术实现：**
+
+- 资产分类树和过滤器支持 `FText` 比较
+- MvrImport/SSuperDataImport 面板添加本地化命名空间
+- 所有蓝图资产元数据字段统一为 `FText` 类型
+
+---
+
+## 版本 26Q2.1
+
+> 📦 **版本号**：26Q2.1
+> 📅 **发布日期**：2026年3月19日
+> 🔧 **基于版本**：26Q2.0
+
+### ✨ DMX激光图案系统 v3.0（全新）
+
+LaserPatternGenerator 全面升级，支持 30 种预设图案 + 6 大自动化动画系统。
+
+**新增图案（+14种）：**
+- Heart / Infinity / Rose / Helix / Polygon / Atom / Vortex / Lightning / Butterfly / Grid / DNA / Starburst / Pendulum / Galaxy
+
+**6 大自动化动画系统：**
+
+| 动画类型 | 功能 |
+|---------|------|
+| 颜色动画 | Rainbow / ColorPulse / ColorFade |
+| 位置动画 | Orbit / Bounce / Figure8 / Sway |
+| 大小动画 | 呼吸脉动效果 |
+| 图案循环 | 自动循环切换图案 |
+| 频闪叠加 | 0-30Hz 可调 |
+| 全局速度 | MasterSpeed 倍数控制 |
+
+**技术优化：**
+- AddPoint 预计算 CosA/SinA 优化
+- DeterministicHash 确定性随机
+- 时间溢出保护（3600s 周期归零）
+- 修复材质参数缓存 bug
+
+### 🎆 节日特效系统（全新）
+
+新增 FestivalFX Niagara 特效系统，支持节日庆典场景。
+
+**特效类型：**
+- 彩带 (Confetti)
+- 烟花 (Pyrotechnics ×3)
+- 烟雾 (CO2/Smoke)
+- 气泡 (Bubble)
+
+### 📐 SuperCAD PDF 导出修复
+
+- 修复 PDF 导出裁剪边框溢出问题
+- 修复标注延伸线亚像素消失问题
+- PDF 页面添加 3pt 边距
+- 延伸线线宽自适应（防止细线消失）
+
+### ⚡ 光照函数图集优化
+
+- 启用 MegaLights 支持
+- 禁用 Rect/Matrix 光照函数（性能优化）
+- 修正 Atlas CVar 语义
+
+### 🔧 其他优化
+
+- **光束视角衰减**：顺光（背着看）时光束密度降低，逆光（对着眼睛打）时光束正常，模拟真实光照感知
+- 优化灯光组件亮度控制
+- 更新灯库配置 (Acme / Chauvet / EK / ETC)
+- 移除废弃的规则文件和旧资产
+- 更新插件图标
+
+---
+
 ## 版本 26Q2.0
 
 > 📦 **版本号**：26Q2.0

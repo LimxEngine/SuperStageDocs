@@ -2,7 +2,7 @@
 
 > **所属模块**: SuperStage 运行时  
 > **适用对象**: 灯光设计师、灯具蓝图制作者  
-> **前置阅读**: [00 - 光源组件总览](/docs/light-components/overview)
+> **前置阅读**: [00 - 光源组件总览](00_LightComponent_Overview.md)
 
 ---
 

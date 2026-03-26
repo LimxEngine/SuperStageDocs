@@ -2,7 +2,7 @@
 
 > **所属模块**: SuperStage 运行时  
 > **适用对象**: 灯光设计师、舞美技术人员、蓝图开发者  
-> **前置阅读**: [15 - 全功能电脑灯 (SuperStageLight)](/docs/superstage-product)
+> **前置阅读**: [15 - 全功能电脑灯 (SuperStageLight)](../15_SuperStageLight.md)
 
 ---
 
@@ -50,15 +50,15 @@ USceneComponent（引擎基类）
 
 | 组件 | 用途 | 典型灯具 | 文档链接 |
 |------|------|----------|----------|
-| **SuperLightingComponent** | 基础灯光渲染（镜片+光斑） | 所有灯具的光源基础 | [基础灯光组件](/docs/light-components/lighting) |
-| **SuperSpotComponent** | 聚光灯投射（真实 SpotLight） | Spot 灯、追光灯 | [聚光灯组件](/docs/light-components/spot) |
-| **SuperBeamComponent** | 体积光束可视化 | Beam 灯、光束灯 | [体积光束组件](/docs/light-components/beam) |
-| **SuperCuttingComponent** | 光闸切割成型 | Profile 灯、成像灯 | [切割光束组件](/docs/light-components/cutting) |
-| **SuperRectComponent** | 矩形面光照明 | LED 面板灯、柔光灯 | [矩形面光组件](/docs/light-components/rect) |
-| **SuperEffectComponent** | 效果面板/LED 屏幕 | LED 效果灯、频闪灯 | [效果平面组件](/docs/light-components/effect) |
-| **SuperMatrixComponent** | 矩阵像素分段控制 | 矩阵灯、LED 条灯 | [矩阵灯组件](/docs/light-components/matrix) |
-| **SuperLaserProComponent** | 激光线投射 | 激光灯（Beyond 驱动） | [激光 Pro 组件](/docs/light-components/laser-pro) |
-| **SuperLiftComponent** | Z 轴升降运动 | 带升降功能的灯具 | [升降控制组件](/docs/light-components/lift) |
+| **SuperLightingComponent** | 基础灯光渲染（镜片+光斑） | 所有灯具的光源基础 | [01_SuperLightingComponent.md](01_SuperLightingComponent.md) |
+| **SuperSpotComponent** | 聚光灯投射（真实 SpotLight） | Spot 灯、追光灯 | [02_SuperSpotComponent.md](02_SuperSpotComponent.md) |
+| **SuperBeamComponent** | 体积光束可视化 | Beam 灯、光束灯 | [03_SuperBeamComponent.md](03_SuperBeamComponent.md) |
+| **SuperCuttingComponent** | 光闸切割成型 | Profile 灯、成像灯 | [04_SuperCuttingComponent.md](04_SuperCuttingComponent.md) |
+| **SuperRectComponent** | 矩形面光照明 | LED 面板灯、柔光灯 | [05_SuperRectComponent.md](05_SuperRectComponent.md) |
+| **SuperEffectComponent** | 效果面板/LED 屏幕 | LED 效果灯、频闪灯 | [06_SuperEffectComponent.md](06_SuperEffectComponent.md) |
+| **SuperMatrixComponent** | 矩阵像素分段控制 | 矩阵灯、LED 条灯 | [07_SuperMatrixComponent.md](07_SuperMatrixComponent.md) |
+| **SuperLaserProComponent** | 激光线投射 | 激光灯（Beyond 驱动） | [08_SuperLaserProComponent.md](08_SuperLaserProComponent.md) |
+| **SuperLiftComponent** | Z 轴升降运动 | 带升降功能的灯具 | [09_SuperLiftComponent.md](09_SuperLiftComponent.md) |
 
 ---
 
@@ -172,15 +172,17 @@ SuperStageLight / LaserActor
 所有光源组件的最终亮度由以下因素共同决定：
 
 ```
-最终亮度 = Actor级Dimmer × 组件级Dimmer(ComponentDimmer) × 频闪倍率(Strobe)
+最终亮度 = Actor级Dimmer × 组件级亮度分控(MaxLightIntensity) × 频闪倍率(Strobe)
 ```
 
 | 参数 | 说明 | 范围 | 默认值 |
 |------|------|------|--------|
 | **Actor 级 Dimmer** | 灯具整体亮度，由 DMX Dimmer 通道控制 | 0.0 ~ 1.0 | 1.0 |
-| **ComponentDimmer** | 组件级亮度分控，用于多模组灯具中独立控制某个组件的亮度 | 0.0 ~ 1.0 | 1.0 |
+| **MaxLightIntensity** | 组件级亮度分控，用于多模组灯具中独立控制某个组件的亮度 | 0.0 ~ 1.0 | 1.0 |
 
-> **使用场景**：当一个灯具 Actor 同时拥有主光源和辅光源时，可以通过 ComponentDimmer 独立降低辅光源的亮度，而不影响主光源。
+> **使用场景**：当一个灯具 Actor 同时拥有主光源和辅光源时，可以通过 MaxLightIntensity 独立降低辅光源的亮度，而不影响主光源。
+
+> **初始化说明**：组件默认参数由 `OnRegister()` 自动初始化，组件注册时会自动调用 `SetLightingMaterial()` 创建材质实例，再调用 `SetLightingDefaultValue()` 设置默认值。无需在 Actor 中手动调用初始化函数。
 
 ### 5.2 亮度响应曲线 (Dimmer Curve)
 
@@ -259,7 +261,7 @@ SuperStageLight / LaserActor
 | **合理选择组件类型** | 不需要体积光束时使用 SuperSpotComponent 而非 SuperBeamComponent |
 | **控制矩阵分段数** | SuperMatrixComponent 的分段数不宜超过必要数量（最大 200） |
 | **关闭不需要的碰撞检测** | 激光组件的碰撞检测有一定开销，不需要时可关闭 |
-| **利用 ComponentDimmer** | 将不使用的组件 Dimmer 设为 0，系统会自动优化 |
+| **利用 MaxLightIntensity** | 将不使用的组件亮度分控设为 0，系统会自动优化 |
 | **注意频闪模式** | 频闪模式 0/1 不消耗 Tick 资源；模式 2~7 会启用每帧计算 |
 | **透明材质按需启用** | Effect 和 Matrix 组件的透明材质比不透明材质开销略高 |
 
@@ -269,12 +271,12 @@ SuperStageLight / LaserActor
 
 请点击以下链接查看各组件的详细参数说明和使用指南：
 
-1. [SuperLightingComponent — 基础灯光组件](/docs/light-components/lighting)
-2. [SuperSpotComponent — 聚光灯组件](/docs/light-components/spot)
-3. [SuperBeamComponent — 体积光束组件](/docs/light-components/beam)
-4. [SuperCuttingComponent — 切割光束组件](/docs/light-components/cutting)
-5. [SuperRectComponent — 矩形面光组件](/docs/light-components/rect)
-6. [SuperEffectComponent — 效果平面组件](/docs/light-components/effect)
-7. [SuperMatrixComponent — 矩阵灯组件](/docs/light-components/matrix)
-8. [SuperLaserProComponent — 激光 Pro 组件](/docs/light-components/laser-pro)
-9. [SuperLiftComponent — 升降控制组件](/docs/light-components/lift)
+1. [SuperLightingComponent — 基础灯光组件](01_SuperLightingComponent.md)
+2. [SuperSpotComponent — 聚光灯组件](02_SuperSpotComponent.md)
+3. [SuperBeamComponent — 体积光束组件](03_SuperBeamComponent.md)
+4. [SuperCuttingComponent — 切割光束组件](04_SuperCuttingComponent.md)
+5. [SuperRectComponent — 矩形面光组件](05_SuperRectComponent.md)
+6. [SuperEffectComponent — 效果平面组件](06_SuperEffectComponent.md)
+7. [SuperMatrixComponent — 矩阵灯组件](07_SuperMatrixComponent.md)
+8. [SuperLaserProComponent — 激光 Pro 组件](08_SuperLaserProComponent.md)
+9. [SuperLiftComponent — 升降控制组件](09_SuperLiftComponent.md)
